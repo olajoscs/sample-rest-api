@@ -3,8 +3,10 @@
 
 use App\Controllers\ProductController;
 use App\Middlewares\Auth;
+use App\Middlewares\Cors;
 
 $app->add(new Auth($app->getContainer()));
+$app->add(new Cors($app->getContainer()));
 
 $app->get('/products', ProductController::class . ':index')->setName('product.list');
 $app->get('/products/{id:[\d]+}', ProductController::class . ':get')->setName('product.get');
