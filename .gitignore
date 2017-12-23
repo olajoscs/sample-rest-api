@@ -1,5 +1,5 @@
 /.idea
 /build
-/config/config.php
+/src/config/config.php
 /vendor
 /debugbar

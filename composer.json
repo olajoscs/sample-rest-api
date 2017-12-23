@@ -29,6 +29,7 @@
   "license": "MIT",
   "autoload-dev": {
     "psr-4": {
+      "App\\": "./src/App",
       "OlajosCs\\QueryBuilder\\": "./tests"
     }
   }
