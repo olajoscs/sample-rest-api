@@ -9,6 +9,10 @@ use App\Middlewares\Cors;
 $app->add(new Auth($app->getContainer()));
 $app->add(new Cors($app->getContainer()));
 
+$app->options('/{routes:.+}', function ($request, $response, $args) {
+    return $response;
+});
+
 $app->get('/products', ProductController::class . ':index')->setName('product.list');
 $app->get('/products/{id:[\d]+}', ProductController::class . ':get')->setName('product.get');
 $app->put('/products/{id:[\d]+}', ProductController::class . ':update')->setName('product.update');
