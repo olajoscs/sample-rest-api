@@ -4,6 +4,8 @@ namespace App\Repositories;
 
 use App\Models\Category;
 use OlajosCs\QueryBuilder\Contracts\Connection;
+use OlajosCs\QueryBuilder\Exceptions\MultipleRowFoundException;
+use OlajosCs\QueryBuilder\Exceptions\RowNotFoundException;
 use OlajosCs\Repository\Exceptions\MappingException;
 use OlajosCs\Repository\Repository;
 
@@ -17,7 +19,7 @@ class CategoryRepository extends Repository implements CategoryRepositoryInterfa
     /**
      * @var Category[]
      */
-    protected $cache;
+    protected $cache = [];
 
 
     /**
@@ -54,7 +56,7 @@ class CategoryRepository extends Repository implements CategoryRepositoryInterfa
      * @param int $id
      *
      * @return Category
-     * @throws \OlajosCs\Repository\Exceptions\MappingException
+     * @throws MappingException
      */
     public function findById(int $id): Category
     {
@@ -63,6 +65,25 @@ class CategoryRepository extends Repository implements CategoryRepositoryInterfa
         }
 
         throw new MappingException('No Category: '. $id);
+    }
+
+
+    /**
+     * Find and return the category by url
+     *
+     * @param string $url
+     *
+     * @return Category
+     * @throws RowNotFoundException
+     * @throws MultipleRowFoundException
+     */
+    public function findByUrl(string $url): Category
+    {
+        return $this->connection
+            ->select()
+            ->from($this->dummy->getTableName())
+            ->where('url', '=', $url)
+            ->getOneClass($this->getModelClass());
     }
 
 

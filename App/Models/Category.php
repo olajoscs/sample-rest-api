@@ -83,10 +83,14 @@ class Category extends Model
      * Set the name of the category
      *
      * @param string $name
+     *
+     * @return Category
      */
-    public function setName(string $name)
+    public function setName(string $name): Category
     {
         $this->name = $name;
+
+        return $this;
     }
 
 
@@ -105,10 +109,14 @@ class Category extends Model
      * Set the url of the category
      *
      * @param string $url
+     *
+     * @return Category
      */
-    public function setUrl(string $url)
+    public function setUrl(string $url): Category
     {
         $this->url = $url;
+
+        return $this;
     }
 
 }

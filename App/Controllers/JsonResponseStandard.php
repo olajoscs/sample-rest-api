@@ -18,7 +18,6 @@ trait JsonResponseStandard
      * @param array    $data
      *
      * @return Response
-     * @throws \RuntimeException
      */
     protected function ok(Response $response, array $data = []): Response
     {
@@ -33,7 +32,6 @@ trait JsonResponseStandard
      * @param string   $message
      *
      * @return Response
-     * @throws \RuntimeException
      */
     protected function error(Response $response, string $message): Response
     {

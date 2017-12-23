@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Product;
 use OlajosCs\Repository\Contracts\RepositoryInterface;
+use OlajosCs\Repository\Exceptions\MappingException;
 
 /**
  * Interface ProductRepositoryInterface
@@ -26,6 +27,7 @@ interface ProductRepositoryInterface extends RepositoryInterface
      * @param int $id
      *
      * @return Product
+     * @throws MappingException
      */
     public function findById(int $id): Product;
 }

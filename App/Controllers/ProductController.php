@@ -69,12 +69,11 @@ class ProductController
      *
      * @param ServerRequestInterface $request
      * @param Response               $response
-     * @param array                  $args
      *
      * @return Response
      * @throws \RuntimeException
      */
-    public function index(ServerRequestInterface $request, Response $response, array $args): Response
+    public function index(ServerRequestInterface $request, Response $response): Response
     {
         $products = $this->productProvider->findAll();
 
@@ -112,7 +111,6 @@ class ProductController
      * @param array                  $args
      *
      * @return Response
-     * @throws \App\Validation\ValidationException
      * @throws \Particle\Validator\Exception\InvalidValueException
      * @throws \RuntimeException
      */
@@ -123,14 +121,20 @@ class ProductController
         }
 
         $body = $request->getParsedBody();
-        $product = $this->productRepository->findById($body['id']);
+
+        try {
+            $product = $this->productRepository->findById($body['id']);
+        } catch (MappingException $exception) {
+            return $this->error($response, $exception->getMessage());
+        }
+
 
         if ((int)$body['id'] !== (int)$args['id']) {
             return $this->error($response, 'ID of the object and in the URL must be the same');
         }
 
         try {
-            $product = $this->build($body, $args, $product);
+            $product = $this->build($body, $product);
         } catch (ValidationException $exception) {
             return $this->error($response, $exception->getMessage());
         }
@@ -141,6 +145,8 @@ class ProductController
             $product = $this->productProvider->findById($product->getId());
         } catch (\PDOException $exception) {
             return $this->error($response, 'Update was not successful');
+        } catch (MappingException $exception) {
+            return $this->error($response, $exception->getMessage());
         }
 
         return $this->ok($response, ['result' => $product]);
@@ -152,21 +158,19 @@ class ProductController
      *
      * @param ServerRequestInterface $request
      * @param Response               $response
-     * @param                        $args
      *
      * @return Response
-     * @throws \App\Validation\ValidationException
      * @throws \Particle\Validator\Exception\InvalidValueException
      * @throws \RuntimeException
      */
-    public function insert(ServerRequestInterface $request, Response $response, array $args): Response
+    public function insert(ServerRequestInterface $request, Response $response): Response
     {
         $body = $request->getParsedBody();
         /** @var Product $product */
         $product = $this->productRepository->create();
 
         try {
-            $product = $this->build($body, $args, $product);
+            $product = $this->build($body, $product);
         } catch (ValidationException $exception) {
             return $this->error($response, $exception->getMessage());
         }
@@ -174,7 +178,7 @@ class ProductController
         try {
             $this->productRepository->save($product);
         } catch (\PDOException $exception) {
-            return $this->error($response, 'Update was not successful');
+            return $this->error($response, 'Insert was not successful');
         }
 
         return $this->ok($response);
@@ -209,14 +213,13 @@ class ProductController
      * Validate and build a product from the request input
      *
      * @param array   $body
-     * @param array   $args
      * @param Product $product
      *
      * @return Product
      * @throws \App\Validation\ValidationException
      * @throws \Particle\Validator\Exception\InvalidValueException
      */
-    private function build(array $body, array $args, Product $product): Product
+    private function build(array $body, Product $product): Product
     {
         $this->validate($body);
 
@@ -251,8 +254,8 @@ class ProductController
      * @param array $body
      *
      * @return void
+     * @throws InvalidValueException
      * @throws ValidationException
-     * @throws \Particle\Validator\Exception\InvalidValueException
      */
     private function validate(array $body): void
     {

@@ -2,9 +2,9 @@
 
 namespace App\Middlewares;
 
-use App\Core\Container;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Slim\Container;
 
 /**
  * Class Middleware

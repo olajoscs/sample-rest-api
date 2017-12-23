@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Response\Product;
 use App\Repositories\ProductRepositoryInterface;
 use App\Services\Response\ProductBuilder;
+use OlajosCs\Repository\Exceptions\MappingException;
 
 /**
  * Class ProductProvider
@@ -62,6 +63,7 @@ class ProductProvider
      * @param int $id
      *
      * @return Product
+     * @throws MappingException
      */
     public function findById(int $id): Product
     {
