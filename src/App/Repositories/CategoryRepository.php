@@ -46,7 +46,7 @@ class CategoryRepository extends Repository implements CategoryRepositoryInterfa
      */
     public function findAll(): array
     {
-        return $this->cache;
+        return array_values($this->cache);
     }
 
 
