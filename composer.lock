@@ -190,16 +190,16 @@
         },
         {
             "name": "olajoscs/querybuilder",
-            "version": "1.0.5",
+            "version": "1.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/olajoscs/QueryBuilder.git",
-                "reference": "027cfc7a07c19b0b5c40d35590de58e1dc1165ca"
+                "reference": "2ace1d093d4854841f17b86390070400645cfc29"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/olajoscs/QueryBuilder/zipball/027cfc7a07c19b0b5c40d35590de58e1dc1165ca",
-                "reference": "027cfc7a07c19b0b5c40d35590de58e1dc1165ca",
+                "url": "https://api.github.com/repos/olajoscs/QueryBuilder/zipball/2ace1d093d4854841f17b86390070400645cfc29",
+                "reference": "2ace1d093d4854841f17b86390070400645cfc29",
                 "shasum": ""
             },
             "require": {
@@ -227,7 +227,7 @@
             ],
             "description": "A basic query builder for relational databases.",
             "homepage": "https://github.com/olajoscs/QueryBuilder",
-            "time": "2017-11-28T19:04:40+00:00"
+            "time": "2017-12-29T08:08:10+00:00"
         },
         {
             "name": "olajoscs/repository",

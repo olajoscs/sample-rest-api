@@ -5,7 +5,7 @@ namespace App\Controllers;
 use App\Models\Product;
 use App\Repositories\CategoryRepositoryInterface;
 use App\Repositories\ProductRepositoryInterface;
-use App\Services\ProductProvider;
+use App\Services\ProductProviderInterface;
 use App\Validation\ValidationException;
 use OlajosCs\Repository\Exceptions\MappingException;
 use Particle\Validator\Exception\InvalidValueException;
@@ -23,7 +23,7 @@ class ProductController
     use JsonResponseStandard;
 
     /**
-     * @var ProductProvider
+     * @var ProductProviderInterface
      */
     private $productProvider;
 
@@ -46,13 +46,13 @@ class ProductController
     /**
      * Create a new ProductController object
      *
-     * @param ProductProvider             $productProvider
+     * @param ProductProviderInterface    $productProvider
      * @param ProductRepositoryInterface  $productRepository
      * @param Validator                   $validator
      * @param CategoryRepositoryInterface $categoryRepository
      */
     public function __construct(
-        ProductProvider $productProvider,
+        ProductProviderInterface $productProvider,
         ProductRepositoryInterface $productRepository,
         Validator $validator,
         CategoryRepositoryInterface $categoryRepository

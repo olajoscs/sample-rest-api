@@ -21,7 +21,7 @@ trait JsonResponseStandard
      */
     protected function ok(Response $response, array $data = []): Response
     {
-        return $response->withJson($data);
+        return $response->withJson($data)->withStatus(200);
     }
 
 
@@ -33,11 +33,15 @@ trait JsonResponseStandard
      *
      * @return Response
      */
-    protected function error(Response $response, string $message): Response
+    protected function error(Response $response, string $message, int $status = null): Response
     {
+        if ($status === null) {
+            $status = 400;
+        }
+
         return $response->withJson([
             'status'  => 'error',
             'message' => $message,
-        ]);
+        ])->withStatus($status);
     }
 }

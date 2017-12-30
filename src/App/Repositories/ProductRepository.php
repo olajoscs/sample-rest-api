@@ -2,7 +2,9 @@
 
 namespace App\Repositories;
 
+use App\Models\Category;
 use App\Models\Product;
+use OlajosCs\Repository\Exceptions\MappingException;
 use OlajosCs\Repository\Repository;
 
 /**
@@ -40,7 +42,7 @@ class ProductRepository extends Repository implements ProductRepositoryInterface
      * @param int $id
      *
      * @return Product
-     * @throws \OlajosCs\Repository\Exceptions\MappingException
+     * @throws MappingException
      */
     public function findById(int $id): Product
     {
@@ -48,6 +50,24 @@ class ProductRepository extends Repository implements ProductRepositoryInterface
         $product = $this->get($id);
 
         return $product;
+    }
+
+
+    /**
+     * Find and return all the products which have the category in the parameter
+     *
+     * @param Category $category
+     *
+     * @return Product[]
+     */
+    public function findByCategory(Category $category): array
+    {
+        return $this->connection
+            ->select()
+            ->from($this->dummy->getTableName())
+            ->where('categoryId', '=', $category->getId())
+            ->orderBy($this->dummy->getIdField())
+            ->getAsClasses(Product::class);
     }
 
 }

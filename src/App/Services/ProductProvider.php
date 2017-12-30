@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Category;
 use App\Models\Response\Product;
 use App\Repositories\ProductRepositoryInterface;
 use App\Services\Response\ProductBuilder;
@@ -12,7 +13,7 @@ use OlajosCs\Repository\Exceptions\MappingException;
  *
  * Return the products for output from the repository
  */
-class ProductProvider
+class ProductProvider implements ProductProviderInterface
 {
     /**
      * @var ProductRepositoryInterface
@@ -70,5 +71,26 @@ class ProductProvider
         $product = $this->productRepository->findById($id);
 
         return $this->productBuilder->buildFromProduct($product);
+    }
+
+
+    /**
+     * Find and return all the products which have the category in the parameter
+     *
+     * @param Category $category
+     *
+     * @return Product[]
+     */
+    public function findByCategory(Category $category): array
+    {
+        $products = $this->productRepository->findByCategory($category);
+
+        $returnProducts = [];
+        foreach ($products as $product) {
+            $returnProducts[] = $this->productBuilder->buildFromProduct($product);
+
+        }
+
+        return $returnProducts;
     }
 }

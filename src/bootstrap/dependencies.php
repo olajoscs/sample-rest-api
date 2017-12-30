@@ -3,6 +3,7 @@
 /** @var App\Core\App $app */
 
 use App\Controllers\CategoryController;
+use App\Controllers\CategoryProductController;
 use App\Controllers\ProductController;
 use App\Core\Config;
 use App\Repositories\CategoryRepository;
@@ -13,6 +14,7 @@ use App\Services\ProductProvider;
 use App\Services\ProductProviderInterface;
 use App\Services\Response\CategoryBuilder;
 use App\Services\Response\ProductBuilder;
+use OlajosCs\QueryBuilder\ConnectionConfig;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Container;
 use Slim\Http\Response;
@@ -28,46 +30,17 @@ $container[Config::class] = function(Container $container) {
 $container['db'] = function(Container $container) {
     $configArray = $container->get(Config::class)->get('database');
 
-    /*
-     * TODO: Have a default class in the QueryBuilder library
-     */
-    $config = new class($configArray) implements \OlajosCs\QueryBuilder\Config {
-        private $config;
+    $config = new class($configArray) extends ConnectionConfig
+    {
         public function __construct(array $config)
         {
-            $this->config = $config;
+            $this->host         = $config['host'];
+            $this->user         = $config['username'];
+            $this->password     = $config['password'];
+            $this->database     = $config['database'];
+            $this->options      = $config['options'] ?: [];
+            $this->databaseType = $config['type'];
         }
-
-        public function getHost()
-        {
-            return $this->config['host'];
-        }
-
-        public function getUser()
-        {
-            return $this->config['username'];
-        }
-
-        public function getPassword()
-        {
-            return $this->config['password'];
-        }
-
-        public function getDatabase()
-        {
-            return $this->config['database'];
-        }
-
-        public function getOptions()
-        {
-            return $this->config['options'];
-        }
-
-        public function getDatabaseType()
-        {
-            return $this->config['type'];
-        }
-
     };
 
     $pdo = new \OlajosCs\QueryBuilder\PDO($config);
@@ -152,5 +125,12 @@ $container[CategoryController::class] = function (Container $container) {
     return new CategoryController(
         $container->get(CategoryRepositoryInterface::class),
         new \Particle\Validator\Validator()
+    );
+};
+
+$container[CategoryProductController::class] = function (Container $container) {
+    return new CategoryProductController(
+        $container->get(CategoryRepositoryInterface::class),
+        $container->get(ProductProviderInterface::class)
     );
 };
