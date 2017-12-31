@@ -93,4 +93,20 @@ class ProductProvider implements ProductProviderInterface
 
         return $returnProducts;
     }
+
+
+    /**
+     * Return the product with the url in the parameter
+     *
+     * @param string $url
+     *
+     * @return Product
+     * @throws MappingException
+     */
+    public function findByUrl(string $url): Product
+    {
+        $product = $this->productRepository->findByUrl($url);
+
+        return $this->productBuilder->buildFromProduct($product);
+    }
 }

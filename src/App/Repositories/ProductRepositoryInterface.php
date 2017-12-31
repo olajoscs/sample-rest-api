@@ -41,4 +41,15 @@ interface ProductRepositoryInterface extends RepositoryInterface
      * @return array
      */
     public function findByCategory(Category $category): array;
+
+
+    /**
+     * Return the product with the url in the parameter
+     *
+     * @param string $url
+     *
+     * @return Product
+     * @throws MappingException
+     */
+    public function findByUrl(string $url): Product;
 }

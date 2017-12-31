@@ -58,7 +58,7 @@ class CategoryController
     {
         $categories = $this->categoryRepository->findAll();
 
-        return $this->ok($response, ['results' => $categories]);
+        return $this->ok($response, ['result' => $categories]);
     }
 
 

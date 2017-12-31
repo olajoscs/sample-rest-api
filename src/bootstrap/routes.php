@@ -19,6 +19,7 @@ $app->get('/products/{id:[\d]+}', ProductController::class . ':get')->setName('p
 $app->put('/products/{id:[\d]+}', ProductController::class . ':update')->setName('product.update');
 $app->post('/products', ProductController::class . ':insert')->setName('product.insert');
 $app->delete('/products/{id:[\d]+}', ProductController::class . ':delete')->setName('product.delete');
+$app->get('/products/{url}', ProductController::class . ':getByUrl')->setName('product.get.url');
 
 
 $app->get('/categories', CategoryController::class . ':index')->setName('category.list');
@@ -28,4 +29,4 @@ $app->post('/categories', CategoryController::class . ':insert')->setName('categ
 $app->delete('/categories/{id:[\d]+}', CategoryController::class . ':delete')->setName('category.delete');
 
 
-$app->get('/products/{category}', CategoryProductController::class . ':getList');
+$app->get('/categories/{category}', CategoryProductController::class . ':getList');

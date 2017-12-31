@@ -66,7 +66,7 @@ class CategoryProductController
 
         $products = $this->productProvider->findByCategory($category);
 
-        return $this->ok($response, ['results' => $products]);
+        return $this->ok($response, ['result' => $products]);
     }
 
 }

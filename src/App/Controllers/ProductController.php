@@ -71,13 +71,12 @@ class ProductController
      * @param Response               $response
      *
      * @return Response
-     * @throws \RuntimeException
      */
     public function index(ServerRequestInterface $request, Response $response): Response
     {
         $products = $this->productProvider->findAll();
 
-        return $this->ok($response, ['results' => $products]);
+        return $this->ok($response, ['result' => $products]);
     }
 
 
@@ -86,17 +85,37 @@ class ProductController
      *
      * @param ServerRequestInterface $request
      * @param Response               $response
-     * @param array                  $args
      *
      * @return Response
-     * @throws \RuntimeException
      */
-    public function get(ServerRequestInterface $request, Response $response, array $args): Response
+    public function get(ServerRequestInterface $request, Response $response): Response
     {
         try {
-            $product = $this->productProvider->findById((int)$args['id']);
+            $product = $this->productProvider->findById((int)$request->getAttribute('id'));
         } catch (MappingException $exception) {
             return $this->error($response, 'Product not found');
+        }
+
+        return $this->ok($response, ['result' => $product]);
+    }
+
+
+    /**
+     * Return the product by the url
+     *
+     * @param ServerRequestInterface $request
+     * @param Response               $response
+     *
+     * @return Response
+     */
+    public function getByUrl(ServerRequestInterface $request, Response $response): Response
+    {
+        $url = $request->getAttribute('url');
+
+        try {
+            $product = $this->productProvider->findByUrl($url);
+        } catch (MappingException $exception) {
+            return $this->error($response, $exception->getMessage());
         }
 
         return $this->ok($response, ['result' => $product]);
@@ -111,8 +130,7 @@ class ProductController
      * @param array                  $args
      *
      * @return Response
-     * @throws \Particle\Validator\Exception\InvalidValueException
-     * @throws \RuntimeException
+     * @throws InvalidValueException
      */
     public function update(ServerRequestInterface $request, Response $response, array $args): Response
     {
@@ -161,7 +179,6 @@ class ProductController
      *
      * @return Response
      * @throws \Particle\Validator\Exception\InvalidValueException
-     * @throws \RuntimeException
      */
     public function insert(ServerRequestInterface $request, Response $response): Response
     {
@@ -190,17 +207,15 @@ class ProductController
      *
      * @param ServerRequestInterface $request
      * @param Response               $response
-     * @param array                  $args
      *
      * @return Response
-     * @throws \RuntimeException
      */
-    public function delete(ServerRequestInterface $request, Response $response, array $args): Response
+    public function delete(ServerRequestInterface $request, Response $response): Response
     {
         try {
-            $product = $this->productRepository->get($args['id']);
+            $product = $this->productRepository->get($request->getAttribute('id'));
         } catch (MappingException $exception) {
-            return $this->error($response, 'Product not found: ' . $args['id']);
+            return $this->error($response, 'Product not found: ' . $request->getAttribute('id'));
         }
 
         $this->productRepository->delete($product);

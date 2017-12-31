@@ -4,6 +4,8 @@ namespace App\Repositories;
 
 use App\Models\Category;
 use App\Models\Product;
+use OlajosCs\QueryBuilder\Exceptions\MultipleRowFoundException;
+use OlajosCs\QueryBuilder\Exceptions\RowNotFoundException;
 use OlajosCs\Repository\Exceptions\MappingException;
 use OlajosCs\Repository\Repository;
 
@@ -68,6 +70,32 @@ class ProductRepository extends Repository implements ProductRepositoryInterface
             ->where('categoryId', '=', $category->getId())
             ->orderBy($this->dummy->getIdField())
             ->getAsClasses(Product::class);
+    }
+
+
+    /**
+     * Return the product with the url in the parameter
+     *
+     * @param string $url
+     *
+     * @return Product
+     * @throws MappingException
+     */
+    public function findByUrl(string $url): Product
+    {
+        try {
+            $product = $this->connection
+                ->select()
+                ->from($this->dummy->getTableName())
+                ->where('url', '=', $url)
+                ->getOneClass(Product::class);
+        } catch (MultipleRowFoundException $e) {
+            throw new MappingException($e->getMessage());
+        } catch (RowNotFoundException $e) {
+            throw new MappingException($e->getMessage());
+        }
+
+        return $product;
     }
 
 }
